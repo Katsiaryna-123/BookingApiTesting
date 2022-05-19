@@ -3,7 +3,7 @@ package Helpers;
 import Beans.TokenCredentialsModel;
 import io.restassured.RestAssured;
 
-public class TokenBuilder {
+public class TokenShmoken {
     public String getToken() {
         return RestAssured
                 .given()

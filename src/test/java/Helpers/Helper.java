@@ -37,7 +37,7 @@ public class Helper {
         return createdBookingIds;
     }
 
-    public void removeAllBookings(String token, List<Integer> bookingIds) {
+    public void removeBookings(String token, List<Integer> bookingIds) {
         for (Integer bookingId : bookingIds) {
             RestAssured
                     .given()
@@ -49,7 +49,7 @@ public class Helper {
         }
     }
 
-    public void removeAllBookings(String token, int bookingId) {
+    public void removeBookings(String token, int bookingId) {
         RestAssured
                 .given()
                 .when()

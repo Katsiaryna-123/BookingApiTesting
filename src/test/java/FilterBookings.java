@@ -1,7 +1,7 @@
 import Beans.BookingDatesModel;
 import Beans.CreateBasicBookingRequestModel;
 import Helpers.Helper;
-import Helpers.TokenBuilder;
+import Helpers.TokenShmoken;
 import io.restassured.RestAssured;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -16,7 +16,7 @@ public class FilterBookings {
 
     @BeforeClass
     void generateToken() {
-        token = new TokenBuilder().getToken();
+        token = new TokenShmoken().getToken();
         helper = new Helper();
     }
 
@@ -63,7 +63,7 @@ public class FilterBookings {
                     .then()
                     .body("firstname", equalTo("mikk"));
         }
-        helper.removeAllBookings(token, bookingIds);
+        helper.removeBookings(token, bookingIds);
     }
 
     @Test
@@ -111,54 +111,6 @@ public class FilterBookings {
                     .body("firstname", equalTo("katsia"))
                     .body("lastname", equalTo("trulala"));
         }
-        helper.removeAllBookings(token, bookingIds);
-    }
-
-    @Test
-    void filterBookingsByCheckInAndCheckOutDates() {
-        CreateBasicBookingRequestModel booking1 = CreateBasicBookingRequestModel.builder()
-                .firstname("katsia")
-                .lastname("trulala")
-                .depositpaid(true)
-                .totalprice(100)
-                .bookingdates(BookingDatesModel.builder()
-                        .checkin("2031-02-10")
-                        .checkout("2030-11-10").build())
-                .additionalneeds("breakfast")
-                .build();
-
-        CreateBasicBookingRequestModel booking2 = CreateBasicBookingRequestModel.builder()
-                .firstname("katsia")
-                .lastname("trulala")
-                .depositpaid(true)
-                .totalprice(100)
-                .bookingdates(BookingDatesModel.builder()
-                        .checkin("2032-02-10")
-                        .checkout("2033-11-10").build())
-                .additionalneeds("breakfast")
-                .build();
-
-        CreateBasicBookingRequestModel[] initialDataForBookings = new CreateBasicBookingRequestModel[]{booking1, booking2};
-
-        helper.createSeveralBooking(initialDataForBookings);
-
-        List<Integer> bookingIds = RestAssured
-                .given()
-                .queryParam("checkin", "2034-03-10")
-                .queryParam("checkout", "2034-12-11")
-                .get("https://restful-booker.herokuapp.com/booking")
-                .then()
-                .extract()
-                .path("bookingid");
-
-        for (Integer bookingId : bookingIds) {
-            RestAssured
-                    .given()
-                    .get("https://restful-booker.herokuapp.com/booking/" + bookingId)
-                    .then()
-                    .body("checkin", equalTo("2034-03-10"))
-                    .body("checkout", equalTo("2034-12-11"));
-        }
-        helper.removeAllBookings(token, bookingIds);
+        helper.removeBookings(token, bookingIds);
     }
 }

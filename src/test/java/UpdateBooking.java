@@ -2,7 +2,7 @@ import Beans.BookingDatesModel;
 import Beans.CreateBasicBookingRequestModel;
 import Beans.BookingResponseModel;
 import Helpers.Helper;
-import Helpers.TokenBuilder;
+import Helpers.TokenShmoken;
 import io.restassured.RestAssured;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -15,7 +15,7 @@ public class UpdateBooking {
     @BeforeClass
     void generateToken() {
         helper = new Helper();
-        token = new TokenBuilder().getToken();
+        token = new TokenShmoken().getToken();
     }
 
     @Test
@@ -45,7 +45,7 @@ public class UpdateBooking {
                 .path("lastname");
 
         Assert.assertEquals(lastnameOfUpdatedBooking, "new last name");
-        helper.removeAllBookings(token, initialBookingId);
+        helper.removeBookings(token, initialBookingId);
     }
 
     @Test
@@ -82,6 +82,6 @@ public class UpdateBooking {
         Assert.assertEquals(result.getFirstname(), booking.getFirstname());
         Assert.assertEquals(result.getLastname(), booking.getLastname());
 
-        helper.removeAllBookings(token, initialBookingId);
+        helper.removeBookings(token, initialBookingId);
     }
 }

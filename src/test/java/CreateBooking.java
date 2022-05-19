@@ -2,16 +2,13 @@ import Beans.BookingDatesModel;
 import Beans.BookingResponseModel;
 import Beans.CreateBasicBookingRequestModel;
 import Helpers.Helper;
-import Helpers.TokenBuilder;
+import Helpers.TokenShmoken;
 import io.restassured.RestAssured;
-import io.restassured.specification.RequestSpecification;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.List;
-
-import static org.hamcrest.Matchers.equalTo;
 
 public class CreateBooking {
     String token;
@@ -19,7 +16,7 @@ public class CreateBooking {
 
     @BeforeClass
     void generateToken() {
-        token = new TokenBuilder().getToken();
+        token = new TokenShmoken().getToken();
         helper = new Helper();
     }
 
@@ -51,7 +48,7 @@ public class CreateBooking {
         Assert.assertEquals(response.getBookingdates().getCheckout(), booking.getBookingdates().getCheckout());
         Assert.assertEquals(response.getAdditionalneeds(), booking.getAdditionalneeds());
 
-        helper.removeAllBookings(token, bookingId);
+        helper.removeBookings(token, bookingId);
     }
 
     @Test
@@ -69,7 +66,7 @@ public class CreateBooking {
 
         int bookingId = helper.createBasicBooking(booking);
 
-        helper.removeAllBookings(token, bookingId);
+        helper.removeBookings(token, bookingId);
     }
 
     @Test
@@ -87,7 +84,7 @@ public class CreateBooking {
 
         int bookingId = helper.createBasicBooking(booking);
 
-        helper.removeAllBookings(token, bookingId);
+        helper.removeBookings(token, bookingId);
     }
 
     @Test
@@ -105,7 +102,7 @@ public class CreateBooking {
 
         int bookingId = helper.createBasicBooking(booking);
 
-        helper.removeAllBookings(token, bookingId);
+        helper.removeBookings(token, bookingId);
     }
 
     @Test
@@ -130,7 +127,7 @@ public class CreateBooking {
                 .extract()
                 .path("bookingid");
 
-        helper.removeAllBookings(token, bookingId);
+        helper.removeBookings(token, bookingId);
     }
 
     @Test
@@ -175,7 +172,7 @@ public class CreateBooking {
                 .extract()
                 .path("bookingid");
 
-        helper.removeAllBookings(token, bookingId);
+        helper.removeBookings(token, bookingId);
     }
 
     @Test
@@ -219,7 +216,7 @@ public class CreateBooking {
 
         Assert.assertEquals(initialDataForBookings.length, response.size());
 
-        helper.removeAllBookings(token, response);
+        helper.removeBookings(token, response);
     }
 
     @Test
@@ -244,7 +241,7 @@ public class CreateBooking {
                 .extract()
                 .path("bookingid");
 
-        helper.removeAllBookings(token, bookingId);
+        helper.removeBookings(token, bookingId);
     }
 
     @Test
@@ -269,6 +266,6 @@ public class CreateBooking {
                 .extract()
                 .path("bookingid");
 
-        helper.removeAllBookings(token, bookingId);
+        helper.removeBookings(token, bookingId);
     }
 }
